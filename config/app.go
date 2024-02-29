@@ -5,11 +5,17 @@ import (
 )
 
 type Config struct {
+	//MYSQL
 	DBHost     string
 	DBPort     string
 	DBUser     string
 	DBPassword string
 	DBName     string
+	//Redis
+	RedisHost string
+	RedisPort string
+	RedisPass string
+	RedisDB   int
 }
 
 func LoadConfig() (*Config, error) {
@@ -19,11 +25,17 @@ func LoadConfig() (*Config, error) {
 	}
 
 	config := &Config{
+		//MYSQL
 		DBHost:     viper.GetString("DB_HOST"),
 		DBPort:     viper.GetString("DB_PORT"),
 		DBUser:     viper.GetString("DB_USER"),
 		DBPassword: viper.GetString("DB_PASSWORD"),
 		DBName:     viper.GetString("DB_NAME"),
+		//Redis
+		RedisHost: viper.GetString("REDIS_HOST"),
+		RedisPort: viper.GetString("REDIS_PORT"),
+		RedisPass: viper.GetString("REDIS_PASSWORD"),
+		RedisDB:   viper.GetInt("REDIS_DB"),
 	}
 
 	return config, nil

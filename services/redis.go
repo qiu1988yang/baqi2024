@@ -1,24 +1,30 @@
 package services
 
 import (
-	"context"
+	"baqi/config"
+	"fmt"
 	"github.com/go-redis/redis/v8"
 )
 
-var rdb *redis.Client
+var RedisClient *redis.Client
 
-func InitRedis(ctx context.Context, addr, password string, db int) error {
-	rdb = redis.NewClient(&redis.Options{
-		Addr:     addr,
-		Password: password,
-		DB:       db,
-	})
+func InitRedis(cfg *config.Config) (*redis.Client, error) {
+	// 构建连接参数
+	options := redis.Options{
+		Addr:     fmt.Sprintf("%s:%s", cfg.RedisHost, cfg.RedisPort),
+		Password: cfg.RedisPass,
+		DB:       cfg.RedisDB,
+	}
 
-	// 测试连接
-	_, err := rdb.Ping(ctx).Result()
-	return err
-}
+	// 连接 Redis
+	client := redis.NewClient(&options)
 
-func Redis() *redis.Client {
-	return rdb
+	// 检查连接是否成功
+	_, err := client.Ping(client.Context()).Result()
+	if err != nil {
+		return nil, err
+	}
+
+	RedisClient = client
+	return client, nil
 }
