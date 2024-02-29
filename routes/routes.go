@@ -1,40 +1,30 @@
 package routes
 
-import "github.com/gin-gonic/gin"
+import (
+	"baqi/controllers"
+	"baqi/middleware"
+	"github.com/gin-gonic/gin"
+)
 
 func SetupRouter() *gin.Engine {
 	// 创建 Gin 实例
 	r := gin.Default()
 
+	// 应用全局中间件
+	r.Use(middleware.RequestLogger())
+
 	// 示例路由
-	r.GET("/", func(c *gin.Context) {
-		c.JSON(200, gin.H{"message": "Hello, Gin!"})
-	})
+	r.GET("/", controllers.Index)
 
-	r.GET("/home", homeHandler)
-	r.GET("/about", aboutHandler)
-	r.GET("/contact", contactHandler)
-
+	// 定义路由分组并应用中间件
+	apiGroup := r.Group("/api")
+	apiGroup.Use(middleware.RequestLogger())
+	{
+		// 定义 "/api" 路由组的子路由
+		apiGroup.GET("/home", controllers.Home)
+		apiGroup.GET("/about", controllers.About)
+	}
+	// 单独定义路由，不在路由组中
+	r.GET("/contact", controllers.Contact)
 	return r
-	// 添加其他路由
-	// ...
-	return r
-}
-
-func homeHandler(c *gin.Context) {
-	c.JSON(200, gin.H{
-		"message": "Welcome to home page",
-	})
-}
-
-func aboutHandler(c *gin.Context) {
-	c.JSON(200, gin.H{
-		"message": "About us",
-	})
-}
-
-func contactHandler(c *gin.Context) {
-	c.JSON(200, gin.H{
-		"message": "Contact us",
-	})
 }

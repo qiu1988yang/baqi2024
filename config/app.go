@@ -16,6 +16,8 @@ type Config struct {
 	RedisPort string
 	RedisPass string
 	RedisDB   int
+	//PORT
+	PORT string
 }
 
 func LoadConfig() (*Config, error) {
@@ -36,6 +38,8 @@ func LoadConfig() (*Config, error) {
 		RedisPort: viper.GetString("REDIS_PORT"),
 		RedisPass: viper.GetString("REDIS_PASSWORD"),
 		RedisDB:   viper.GetInt("REDIS_DB"),
+		//端口
+		PORT: viper.GetString("PORT"),
 	}
 
 	return config, nil
