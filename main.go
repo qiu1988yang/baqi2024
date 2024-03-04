@@ -20,11 +20,13 @@ func main() {
 		panic(fmt.Errorf("Fatal error initializing database: %s \n", err))
 	}
 
+	//初始redis
 	_, err = services.InitRedis(cfg)
 	if err != nil {
 		panic(fmt.Errorf("Fatal error initializing redis: %s \n", err))
 	}
 
+	//初始日志
 	myLogger := services.NewLogger()
 	myLogger.Info("app.log", "这是一条信息日志")
 	myLogger.Warning("service.log", "这是一条警告日志")
